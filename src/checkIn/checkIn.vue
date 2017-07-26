@@ -1,5 +1,5 @@
 <template>
-	<div class="checkIn" :class="{ 'enable-play': enablePlay }">
+	<div class="checkIn" :class="{ 'enable-play': checkIn.enable }">
 		<div class="checkIn-main">
 
 			<Slider :data="sliderData"></Slider>
@@ -33,9 +33,8 @@
 		},
 		data () {
 			return {
-				'enablePlay': true,			// - enable/disable events
 				'timeline': {
-					'enablePlayDelay': 5000,
+					'checkInEnableDelay': 2000,
 				},
 				'image': {
 					'src': '/assets/images/singer.jpg'
@@ -44,14 +43,16 @@
 				
 				},
 				'checkIn': {
-					'enable': true,
+					'enable': false,
 					'done': false,
 				},
 				...this.data,
 			}
 		},
 		mounted () {
-
+			setTimeout(() => {
+				this.checkIn.enable = true;
+			}, this.timeline.checkInEnableDelay); // NOTE: Only for dev
 		},
 		'methods': {
 
