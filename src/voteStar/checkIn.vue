@@ -31,8 +31,10 @@
 			
 		},
 		'props': {
-			data: Object,
-			index: Number
+			'onPass': {
+				'type': Function,
+				'required': true,
+			},
 		},
 		'computed': {
 			
@@ -54,11 +56,10 @@
 				'timeline': {
 					'checkInPass': 1000,                    // - animation duration for pass checkIn
 				},
-				...this.data                                // - parent data
 			}
 		},
 		mounted () {
-		
+			console.log(this);
 		},
 		'methods': {
 			onPanMove(props) {
@@ -95,7 +96,10 @@
 			},
 			passCheckIn() {
 				this.checkIn.pass = true;
-				setTimeout(() => this.checkIn.passed = true, this.timeline.checkInPass);
+				setTimeout(() => {
+					this.checkIn.passed = true;
+					this.onPass(); // - parent prop
+				}, this.timeline.checkInPass);
 			}
 		}
 	}
