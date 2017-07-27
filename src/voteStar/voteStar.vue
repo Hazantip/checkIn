@@ -61,7 +61,7 @@
 					'expiredState': 30000,
 				},
 				'image': {
-					'src': '/assets/images/singer.jpg'
+					'src': 'assets/images/singer.jpg'
 				},
 			}
 		},

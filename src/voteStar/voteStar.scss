@@ -228,6 +228,11 @@ $voteHandleVisible: 80;
 			svg {
 				fill: $blue2;
 			}
+			.plane {
+				transform: translateY($voteHandleVisible + px);
+				padding: 15px;
+				margin-top: -37px;
+			}
 		}
 		.cancel & {
 			left: ($voteHandleVisible - $voteHandleWith) + px;
@@ -246,13 +251,20 @@ $voteHandleVisible: 80;
 		.active & {
 			transition: box-shadow 700ms ease-out;
 			box-shadow: 0 0 0 25px rgba(249, 249, 249, 0);
-			i {
-				transform: rotate(0deg);
-				transition: rotate 350ms ease-in-out;
+			.arrow {
+				transform: rotate(180deg);
+				transition: transform 350ms ease-in-out;
+			}
+			.plane {
+				transition: 300ms cubic-bezier(0.39, 0.58, 0.57, 1) 300ms;
+				transform: translateY(0);
 			}
 		}
-		.active.cancel & i {
-			transform: rotate(-180deg);
+		.active.accept & {
+			.arrow {
+				transform: translateX(-$voteHandleVisible + px) rotate(-90deg) ;
+				transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+			}
 		}
 	}
 	
