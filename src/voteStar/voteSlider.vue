@@ -1,30 +1,35 @@
 <template>
 	<transition name="showVoteSlider" :duration="{ enter: timeline.showVoteSlider, leave: 0 }">
 		<div class="voteSlider" v-if="enabled">
-			<div class="voteSlider-inner">
-				<div class="voteSlider-handle__wrap accept">
-					<div class="voteSlider-handle">
-						text <i>--></i>
+			<div class="voteSlider-inner" :style="[style, {}]">
+				
+				<v-touch @panmove="onPanMove" @panend="onPanEnd">
+					<div class="voteSlider-handle__wrap accept" :class="{ active: vote.accept.state }">
+						<div class="voteSlider-handle">
+							<div class="text">{{ vote.accept.text }}</div>
+							<i>
+								<svg fill="#FFF" enable-background="new 0 0 64 64" viewBox="0 0 64 64" width="100%">
+									<polygon points="32,15 17.921,46.677 32,39.638 46.079,46.677" />
+								</svg>
+							</i>
+						</div>
 					</div>
-				</div>
-				<div class="voteSlider-handle__wrap cancel">
-					<div class="voteSlider-handle">
-						text <i><--</i>
+				</v-touch>
+
+				<v-touch @panmove="onPanMove" @panend="onPanEnd">
+					<div class="voteSlider-handle__wrap cancel" :class="{ active: vote.cancel.state }">
+						<div class="voteSlider-handle">
+							<div class="text">{{ vote.cancel.text }}</div>
+							<i>
+								<svg fill="#FFF" enable-background="new 0 0 64 64" viewBox="0 0 64 64" width="100%">
+									<polygon points="32,15 17.921,46.677 32,39.638 46.079,46.677" />
+								</svg>
+							</i>
+						</div>
 					</div>
-				</div>
+				</v-touch>
+				
 			</div>
-			<!--<div class="checkIn-slider">
-				<div class="checkIn-slider__inner" ref="inner">
-					<div class="checkIn-slider__text" :style="[styleText, {}]">{{ checkIn.text }}</div>
-					<v-touch @panmove="onPanMove" @panend="onPanEnd">
-						<span
-							class="checkIn-slider__handle"
-							:class="{'animate': !checkIn.panning}"
-							:style="[style, {}]"
-						></span>
-					</v-touch>
-				</div>
-			</div>-->
 		</div>
 	</transition>
 </template>
@@ -47,71 +52,76 @@
 				'type': Boolean,
 				'required': true,
 			},
+			'onVote': {
+				'type': Function,
+				'required': true,
+			},
 		},
 		'computed': {
 			
 		},
 		data () {
 			return {
-				'checkIn': {
-					'pass': false,                          // - should/able to pass
-					'passed': false,                        // - component pass and already unmounted
-					'panning': false,                       // - state for indicate is pan event called
-					'text': 'החליקו לכניסה להצבעה',
+				'vote': {
+					'panning': false,
+					'done': false,
+					'accept': {
+						'text': 'עבר',
+						'state': false,
+					},
+					'cancel': {
+						'text': 'לא עבר',
+						'state': false,
+					},
 				},
 				'style': {
-															// - inline css object for handle
-				},
-				'styleText': {
-															// - inline css object for text
+																// - inline css object for handle container
 				},
 				'timeline': {
-					'showVoteSlider': 2000,                    // - animation duration for showVoteSlider
+					'showVoteSlider': 2000,                     // - animation duration for showVoteSlider
 				},
 			}
 		},
 		mounted () {
-			console.log(this);
+		
 		},
 		'methods': {
 			onPanMove(props) {
-				const totalWidth = this.$refs.inner.getBoundingClientRect().width;
-				const handleSize = props.target.getBoundingClientRect().width;
-				const delta = Math.max(props.deltaX, 0);
-				const maxDelta = totalWidth - handleSize;
-				const translateX = Math.min(delta, maxDelta);
-				const transition = '10ms linear';
-				const pointToHideText = 0.5;
+				
+				if (this.vote.done) {
+					return false;
+				}
 
-				this.checkIn.panning = true;
+				const maxDelta = 80;
+				const polarity = props.deltaX >= 0 ? '' : '-';
+				const delta = Math.abs(props.deltaX);
+				const translateX = `${polarity}${Math.min(delta, maxDelta)}`;
+				
+				this.vote.panning = true;
 
 				this.style = {
 					'transform': `translateX(${translateX}px)`,
-					transition,
-				};
-				
-				this.styleText = {
-					'opacity': pointToHideText - (translateX / maxDelta),
-					transition,
+					'transition': '10ms ease',
 				};
 
-				if (translateX === maxDelta) {
-					this.passCheckIn();
+				if (Math.abs(translateX) === maxDelta) {
+					this.setVoteResults(translateX);
 				}
 			},
 			onPanEnd() {
-				const transition = '300ms ease';
-				
-				this.checkIn.panning = false;
-				this.style = { 'transform': 'translateX(0)', transition };
-				this.styleText = { 'opacity': 1, transition };
+				if (this.vote.done) {
+					return false;
+				}
+
+				this.vote.panning = false;
+				this.style = { 'transform': 'translateX(0)', 'transition': '300ms ease' };
 			},
-			passCheckIn() {
-				this.checkIn.pass = true;
-				setTimeout(() => {
-					this.checkIn.passed = true;
-					this.onPass(); // - parent prop
-				}, this.timeline.checkInPass);
+			setVoteResults(translateX) {
+				const result = translateX > 0 ? 'accept' : 'cancel';
+				this.vote.panning = false;
+				this.vote.done = true;
+				this.vote[result].state = true;
+				this.onVote();  // prop parent func
 			}
 		}
 	}

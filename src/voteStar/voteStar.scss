@@ -1,5 +1,6 @@
-$red                    : #D0021B;
-$blue                   : #02A3D0;
+$red                    : #FF2C25;
+$blue                   : #0BB7CF;
+$blue2                  : #3FAEFF;
 $sliderHeight           : 80; // px
 $sliderPadding          : 10;  // px
 $handleSize             : $sliderHeight - ($sliderPadding * 2); // px
@@ -60,7 +61,7 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background-image: linear-gradient(to bottom , rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+			background-image: linear-gradient(to bottom , rgba(0, 0, 0, 0), rgba(255, 255, 255, 1));
 			opacity: 0.29;
 		}
 		&::before {
@@ -71,7 +72,7 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 			right: 0;
 			bottom: 0;
 			background-color: #000;
-			opacity: 0.38;
+			opacity: 0;
 		}
 	}
 	&-state {
@@ -80,8 +81,8 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 		left: 0;
 		right: 0;
 		z-index: 100;
-		background-color: rgba(0, 0, 0, 0.15);
-		padding: 4px 15px;
+		background-color: rgba(0, 0, 0, 0.38);
+		padding: 12px 15px;
 		text-align: center;
 		color: white;
 	}
@@ -95,9 +96,10 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 		right: 6%;
 		left: 6%;
 		height: $sliderHeight + px;
-		background: rgba(0, 0, 0, 0.54);
+		background: rgba(0, 0, 0, 0.8);
 		transition: opacity 1000ms ease, background-color 1000ms ease;
-		padding: $sliderPadding + px;
+		padding: ($sliderPadding - 2 + px) ($sliderPadding + px);
+		box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.15);
 		&,
 		&__inner {
 			border-radius: $sliderRadius;
@@ -116,8 +118,12 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 			z-index: 0;
 			top: 0;
 			color: white;
-			padding: 0 30px;
+			padding: 0 25px;
 			line-height: $handleSize + px;
+			font-size: 18px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 		&__handle {
 			display: block;
@@ -128,7 +134,7 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 			margin-top: -($handleSize / 2) + px;
 			width: $handleSize + px;
 			height: $handleSize + px;
-			background-color: rgba(88, 88, 88, 0.85);
+			background-color: rgba(255, 255, 255, 0.22);
 			border-radius: 50%;
 			cursor: pointer;
 			transition: background-color 300ms ease;
@@ -148,19 +154,21 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 	// - leave animation
 	&.checkInOut-leave-active {
 		.checkIn-slider {
-			transition: 400ms ease 0ms;
-			transform-origin: 50% 50%;
-			//transform: translateX(-10px);
-			opacity: 0;
 			overflow: hidden;
+			opacity: 0;
+			box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+			transition: opacity 800ms ease, box-shadow 400ms ease-out;
 		}
 		.checkIn-slider__inner {
-			//transform: translateX(75px);
+			transform: translateX(75px);
 			transition: 200ms ease-out;
 		}
 	}
 }
 
+$voteHandleWith: 240;
+$voteHandleHeight: 80;
+$voteHandleVisible: 80;
 .voteSlider {
 	position: absolute;
 	bottom: 34px;
@@ -169,48 +177,101 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 	z-index: 30;
 	&-inner {
 		position: relative;
-		height: $sliderHeight + px;
+		height: $voteHandleHeight + px;
 	}
-	$handleWidth: 200;
-	$visibleHandlePart: 0.6;
 	&-handle__wrap {
 		position: absolute;
-		height: $sliderHeight + px;
-		width: $handleWidth + px;
+		top: 0;
+		height: $voteHandleHeight + px;
+		width: $voteHandleVisible + px;
 		&.accept {
 			left: 0;
-			margin-left: -($handleWidth * $visibleHandlePart) + px;
-			text-align: right;
 		}
 		&.cancel {
 			right: 0;
-			margin-right: -($handleWidth * $visibleHandlePart) + px;
-			text-align: left;
 		}
 	}
 	&-handle {
 		position: absolute;
 		top: 0;
 		height: 100%;
-		width: 100%;
-		background: rgba(0, 0, 0, 0.54);
+		width: $voteHandleWith + px;
+		background: rgba(0, 0, 0, 0.8);
 		border-radius: $sliderRadius;
+		display: flex;
+		color: white;
+		align-items: center;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		box-shadow: 0 0 0 0px rgba(249, 249, 249, 0.15);
+		i {
+			display: block;
+			width: 70px;
+			position: absolute;
+			top: 50%;
+			margin-top: -35px;
+		}
+		svg {
+			display: block;
+			width: 100%;
+		}
+		.accept & {
+			left: ($voteHandleVisible - $voteHandleWith) + px;
+			justify-content: flex-start;
+			padding-right: $voteHandleVisible + 10 + px;
+			text-align: right;
+			i {
+				right: 10px;
+				transform: rotate(90deg);
+			}
+			svg {
+				fill: $blue2;
+			}
+		}
+		.cancel & {
+			right: ($voteHandleVisible - $voteHandleWith) + px;
+			justify-content: flex-end;
+			padding-left: $voteHandleVisible + 10 + px;
+			text-align: left;
+			i {
+				left: 10px;
+				transform: rotate(-90deg);
+			}
+			svg {
+				fill: $red;
+			}
+		}
+		// on vote done!
+		.active & {
+			transition: box-shadow 700ms ease-out;
+			box-shadow: 0 0 0 25px rgba(249, 249, 249, 0);
+			i {
+				transform: rotate(0deg);
+				transition: rotate 350ms ease-in-out;
+			}
+		}
+		.active.cancel & i {
+			transform: rotate(-180deg);
+		}
 	}
+	
 	// - enter animations
 	&.showVoteSlider-enter {
 		.voteSlider-handle__wrap {
-			&:first-child {
-				transform: translateX(-100px);
+			&.accept {
+				transform: translateX(-$voteHandleVisible + px);
 			}
-			&:last-child {
-				transform: translateX(100px);
+			&.cancel {
+				transform: translateX($voteHandleVisible + px);
 			}
 		}
 	}
 	&.showVoteSlider-enter-active {
 		.voteSlider-handle__wrap {
 			// TODO: probably should be better to wrap it with this own transition component
-			transition: 1000ms ease-out;
+			//transition: transform 600ms ease-out 400ms;
+			transition: transform 600ms cubic-bezier(0.18, 0.89, 0.32, 1.28) 400ms;
 			transform: translateX(0);
 		}
 	}
@@ -225,7 +286,7 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 		background-color: $blue;
 		&.animate {
 			animation: 8000ms wobble ease infinite;
-			animation-delay: -6000ms;
+			animation-delay: -2000ms;
 		}
 	}
 	.checkIn-slider__text {
@@ -347,7 +408,7 @@ $sine                   : cubic-bezier(0.39, 0.58, 0.57, 1);
 
 // - Fade-in-out
 .fadeInOut-enter-active {
-	transition: 300ms ease-out 0ms;
+	transition: 600ms ease-out 0ms;
 }
 .fadeInOut-leave-active {
 	transition: 400ms ease-out 0ms;

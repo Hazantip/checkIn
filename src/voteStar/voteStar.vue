@@ -4,7 +4,7 @@
 
 			<CheckIn :onPass="onPass"></CheckIn>
 
-			<VoteSlider :enabled="isEnabledVoteSlide()"></VoteSlider>
+			<VoteSlider :enabled="isEnabledVoteSlide()" :onVote="onVote"></VoteSlider>
 
 			<div class="starVote-image" :style="[{ backgroundImage: 'url(' + this.image.src + ')' }]"></div>
 			
@@ -102,6 +102,10 @@
 			onPass() {
 				// for checkIn component
 				this.setState({ 'key': 'voting', 'value': true });
+			},
+			onVote() {
+				// for voteSlider component
+				this.setState({ 'key': 'voted', 'value': true });
 			},
 			isEnabledVoteSlide() {
 				return this.states.voting.state || this.states.voted.state
