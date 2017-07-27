@@ -185,10 +185,10 @@ $voteHandleVisible: 80;
 		height: $voteHandleHeight + px;
 		width: $voteHandleVisible + px;
 		&.accept {
-			left: 0;
+			right: 0;
 		}
 		&.cancel {
-			right: 0;
+			left: 0;
 		}
 	}
 	&-handle {
@@ -217,19 +217,6 @@ $voteHandleVisible: 80;
 			width: 100%;
 		}
 		.accept & {
-			left: ($voteHandleVisible - $voteHandleWith) + px;
-			justify-content: flex-start;
-			padding-right: $voteHandleVisible + 10 + px;
-			text-align: right;
-			i {
-				right: 10px;
-				transform: rotate(90deg);
-			}
-			svg {
-				fill: $blue2;
-			}
-		}
-		.cancel & {
 			right: ($voteHandleVisible - $voteHandleWith) + px;
 			justify-content: flex-end;
 			padding-left: $voteHandleVisible + 10 + px;
@@ -237,6 +224,19 @@ $voteHandleVisible: 80;
 			i {
 				left: 10px;
 				transform: rotate(-90deg);
+			}
+			svg {
+				fill: $blue2;
+			}
+		}
+		.cancel & {
+			left: ($voteHandleVisible - $voteHandleWith) + px;
+			justify-content: flex-start;
+			padding-right: $voteHandleVisible + 10 + px;
+			text-align: right;
+			i {
+				right: 10px;
+				transform: rotate(90deg);
 			}
 			svg {
 				fill: $red;
@@ -260,10 +260,10 @@ $voteHandleVisible: 80;
 	&.showVoteSlider-enter {
 		.voteSlider-handle__wrap {
 			&.accept {
-				transform: translateX(-$voteHandleVisible + px);
+				transform: translateX($voteHandleVisible + px);
 			}
 			&.cancel {
-				transform: translateX($voteHandleVisible + px);
+				transform: translateX(-$voteHandleVisible + px);
 			}
 		}
 	}

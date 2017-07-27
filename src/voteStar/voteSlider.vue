@@ -2,11 +2,11 @@
 	<transition name="showVoteSlider" :duration="{ enter: timeline.showVoteSlider, leave: 0 }">
 		<div class="voteSlider" v-if="enabled">
 			<div class="voteSlider-inner" :style="[style, {}]">
-				
+
 				<v-touch @panmove="onPanMove" @panend="onPanEnd">
-					<div class="voteSlider-handle__wrap accept" :class="{ active: vote.accept.state }">
+					<div class="voteSlider-handle__wrap cancel" :class="{ active: vote.cancel.state }">
 						<div class="voteSlider-handle">
-							<div class="text">{{ vote.accept.text }}</div>
+							<div class="text">{{ vote.cancel.text }}</div>
 							<i>
 								<svg fill="#FFF" enable-background="new 0 0 64 64" viewBox="0 0 64 64" width="100%">
 									<polygon points="32,15 17.921,46.677 32,39.638 46.079,46.677" />
@@ -15,11 +15,11 @@
 						</div>
 					</div>
 				</v-touch>
-
+				
 				<v-touch @panmove="onPanMove" @panend="onPanEnd">
-					<div class="voteSlider-handle__wrap cancel" :class="{ active: vote.cancel.state }">
+					<div class="voteSlider-handle__wrap accept" :class="{ active: vote.accept.state }">
 						<div class="voteSlider-handle">
-							<div class="text">{{ vote.cancel.text }}</div>
+							<div class="text">{{ vote.accept.text }}</div>
 							<i>
 								<svg fill="#FFF" enable-background="new 0 0 64 64" viewBox="0 0 64 64" width="100%">
 									<polygon points="32,15 17.921,46.677 32,39.638 46.079,46.677" />
@@ -117,11 +117,13 @@
 				this.style = { 'transform': 'translateX(0)', 'transition': '300ms ease' };
 			},
 			setVoteResults(translateX) {
-				const result = translateX > 0 ? 'accept' : 'cancel';
+				const result = translateX < 0 ? 'accept' : 'cancel';
 				this.vote.panning = false;
 				this.vote.done = true;
 				this.vote[result].state = true;
 				this.onVote();  // prop parent func
+				console.log(this);
+				
 			}
 		}
 	}
