@@ -1,18 +1,13 @@
 <template>
-	<div class="starVote" :class="{ 'enable-play': this.getEnablePlay() }">
+	<div class="starVote" :class="{ 'enable-play': getEnablePlay() }">
 		<div class="starVote-main">
 
 			<CheckIn :onPass="onPass"></CheckIn>
 
+			<VoteSlider :enabled="isEnabledVoteSlide()"></VoteSlider>
+
 			<div class="starVote-image" :style="[{ backgroundImage: 'url(' + this.image.src + ')' }]"></div>
 			
-			<!--<div v-for="state in states">
-				<transition name="fade" v-if="state.state">
-					<div class="starVote-state" v-if="state.state">
-						{{ state.text }}
-					</div>
-				</transition>
-			</div>-->
 			<transition-group name="fadeInOut">
 				<div class="starVote-state" v-for="state in states" v-if="state.state" v-bind:key="state.text">
 					{{ state.text }}
@@ -21,22 +16,17 @@
 			
 		</div>
 
-		<!-- NOTE: unnecessary; gives just a space for dev view -->
-		<div class="starVote-buttons">
-			<transition name="fade">
-				<!--<button v-show="enablePlay" :disabled="checkIn.done" class="checkIn-button">checkIn</button>-->
-			</transition>
-		</div>
-
 	</div>
 </template>
 
 <script>
 	import CheckIn from './checkIn.vue';
+	import VoteSlider from './voteSlider.vue';
 
 	export default {
 		'components': {
 			CheckIn,
+			VoteSlider,
 		},
 		'props': {
 			data: Object,
@@ -67,7 +57,7 @@
 					},
 				},
 				'timeline': {
-					'readyState': 2000,
+					'readyState': 500,
 					'expiredState': 30000,
 				},
 				'image': {
@@ -112,6 +102,9 @@
 			onPass() {
 				// for checkIn component
 				this.setState({ 'key': 'voting', 'value': true });
+			},
+			isEnabledVoteSlide() {
+				return this.states.voting.state || this.states.voted.state
 			},
 		}
 	}
