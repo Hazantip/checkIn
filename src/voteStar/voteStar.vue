@@ -2,7 +2,7 @@
 	<div class="starVote" :class="{ 'enable-play': getEnablePlay() }">
 		<div class="starVote-main">
 
-			<CheckIn :onPass="onPass"></CheckIn>
+			<CheckIn :onPass="onPass" :isExpired="states.expired.state"></CheckIn>
 
 			<VoteSlider :enabled="isEnabledVoteSlide()" :onVote="onVote"></VoteSlider>
 

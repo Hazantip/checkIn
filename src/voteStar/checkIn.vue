@@ -3,7 +3,12 @@
 		<div class="checkIn" v-if="!checkIn.pass">
 			<div class="checkIn-slider">
 				<div class="checkIn-slider__inner" ref="inner">
-					<div class="checkIn-slider__text" :style="[styleText, {}]">{{ checkIn.text }}</div>
+					<transition name="fade" :duration="{ enter: 0 }">
+						<div v-if="!isExpired" class="checkIn-slider__text" :style="styleText">{{ checkIn.text }}</div>
+					</transition>
+					<transition name="fade">
+						<div v-if="isExpired" class="checkIn-slider__text" :style="styleText">{{ checkIn.textExpired }}</div>
+					</transition>
 					<v-touch @panmove="onPanMove" @panend="onPanEnd">
 						<span
 							class="checkIn-slider__handle"
@@ -35,6 +40,10 @@
 				'type': Function,
 				'required': true,
 			},
+			'isExpired': {
+				'type': Boolean,
+				'required': true,
+			},
 		},
 		'computed': {
 			
@@ -43,16 +52,13 @@
 			return {
 				'checkIn': {
 					'pass': false,                          // - should/able to pass
-					'passed': false,                        // - component pass and already unmounted
-					'panning': false,                       // - state for indicate is pan event called
+					'passed': false,                        // - checkIn pass and component unmounted
+					'panning': false,                       // - state for indicate is pan event calling
 					'text': 'החליקו לכניסה להצבעה',
+					'textExpired': 'לא ניתן להיכנס להצבעה',
 				},
-				'style': {
-															// - inline css object for handle
-				},
-				'styleText': {
-															// - inline css object for text
-				},
+				'style': {},								// - inline css object for handle
+				'styleText': {},							// - inline css object for text
 				'timeline': {
 					'checkInPass': 1000,                    // - animation duration for pass checkIn
 				},
@@ -100,7 +106,7 @@
 					this.checkIn.passed = true;
 					this.onPass(); // - parent prop
 				}, this.timeline.checkInPass);
-			}
+			},
 		}
 	}
 </script>

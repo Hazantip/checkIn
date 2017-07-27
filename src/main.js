@@ -16,8 +16,8 @@ function DOMLoaded() {
 	// TODO(done): hide text while swipe
 	// TODO(done): pass checkIn on end point
 	// TODO(done): enable/disable states - implement & stylize
-	// TODO: add some fun animations
-	// TODO: should return/have props: 1) enable checkIn 2) checkIn done 3) panning
+	// TODO(done): add some animations
+	// TODO(done): should return/have props: 1) enable checkIn 2) checkIn done 3) panning ... etc
 
 	const voteStar = new Vue({
 		el: '#voteStar',
