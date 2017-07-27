@@ -1,12 +1,12 @@
 <template>
 	<transition name="checkInOut" :duration="{ enter: 0, leave: timeline.checkInPass }">
-		<div v-if="!checkIn.pass">
-			<div class="checkIn-scale">
-				<div class="checkIn-scale__inner" ref="inner">
-					<div class="checkIn-scale__text" :style="[styleText, {}]">{{ checkIn.text }}</div>
+		<div class="checkIn" v-if="!checkIn.pass">
+			<div class="checkIn-slider">
+				<div class="checkIn-slider__inner" ref="inner">
+					<div class="checkIn-slider__text" :style="[styleText, {}]">{{ checkIn.text }}</div>
 					<v-touch @panmove="onPanMove" @panend="onPanEnd">
 						<span
-							class="checkIn-scale__handle"
+							class="checkIn-slider__handle"
 							:class="{'animate': !checkIn.panning}"
 							:style="[style, {}]"
 						></span>
@@ -39,12 +39,11 @@
 		},
 		data () {
 			return {
-				'enablePlay': false,
 				'checkIn': {
 					'pass': false,                          // - should/able to pass
 					'passed': false,                        // - component pass and already unmounted
 					'panning': false,                       // - state for indicate is pan event called
-					'text': 'החלק לפתיחה',
+					'text': 'החליקו לכניסה להצבעה',
 				},
 				'style': {
 															// - inline css object for handle
@@ -53,7 +52,7 @@
 															// - inline css object for text
 				},
 				'timeline': {
-					'checkInPass': 3000,                    // - animation duration for pass checkIn
+					'checkInPass': 1000,                    // - animation duration for pass checkIn
 				},
 				...this.data                                // - parent data
 			}

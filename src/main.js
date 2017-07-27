@@ -1,6 +1,6 @@
 // - global css
 import Vue from 'vue';
-import voteComponent from './checkIn/checkIn.vue';
+import voteStarComponent from './voteStar/voteStar.vue';
 import './theme/theme.scss';
 
 /**
@@ -19,11 +19,11 @@ function DOMLoaded() {
 	// TODO: add some fun animations
 	// TODO: should return/have props: 1) enable checkIn 2) checkIn done 3) panning
 
-	const checkIn = new Vue({
-		el: '#checkIn',
-		template: '<checkIn />',
+	const voteStar = new Vue({
+		el: '#voteStar',
+		template: '<voteStarComponent />',
 		components: {
-			'checkIn': voteComponent
+			voteStarComponent
 		}
 	});
 
